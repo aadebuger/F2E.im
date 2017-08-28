@@ -1,0 +1,39 @@
+version: '2'
+services:
+
+
+
+ mongodata:  
+    image: mongo
+#    volumes:
+#       - /data/db
+    command: --break-mongo
+ db:
+     image: mysql:5.7
+#     volumes:
+#       - db_data:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: somewordpress
+       MYSQL_DATABASE: f2e
+       MYSQL_USER:  bc
+       MYSQL_PASSWORD: bc2018
+ f2e:
+    image: aadebuger/f2e
+
+    depends_on:
+       - db
+    ports:
+      - "7000:5000"  
+    environment:
+      - MYDB_PORT_27017_TCP_ADDR=mongodb
+      - LANG="en_US.UTF-8"
+      - PYTHONIOENCODING=UTF-8 
+      - USERNAME=bc
+      - PASSWORD=bc2018
+      - HOST= db
+
+    tty: true
+volumes:
+    db_data:
+
